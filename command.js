@@ -1,15 +1,15 @@
-'use strict';
+
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 
-var _extends =
+const _extends =
   Object.assign ||
   function(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
+    for (let i = 1; i < arguments.length; i++) {
+      const source = arguments[i];
+      for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
@@ -27,7 +27,7 @@ var _extends =
 exports.matchImageSnapshotCommand = matchImageSnapshotCommand;
 exports.addMatchImageSnapshotCommand = addMatchImageSnapshotCommand;
 
-var _constants = require('./constants');
+const _constants = require('./constants');
 
 const screenshotsFolder = Cypress.config('screenshotsFolder');
 const updateSnapshots = Cypress.env('updateSnapshots') || false;
@@ -66,9 +66,10 @@ function matchImageSnapshotCommand(defaultOptions) {
           diffOutputPath,
         }) => {
           if (!pass && !added && !updated) {
-            if (commandOptions.retryCounter > 0) {
-              const newCommandOptions = _extends({}, commandOptions, {
-                retryCounter: commandOptions.retryCounter - 1,
+            const retries = commandOptions ? commandOptions.retryCounter : options.retryCounter;
+            if (retries > 0) {
+              const newCommandOptions = _extends({}, options, {
+                retryCounter: retries - 1
               });
               cy.wait(newCommandOptions.retryWaitingTime || 100);
               return matchImageSnapshot(subject, maybeName, newCommandOptions);

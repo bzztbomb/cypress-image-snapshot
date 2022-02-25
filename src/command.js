@@ -43,10 +43,13 @@ export function matchImageSnapshotCommand(defaultOptions) {
           diffOutputPath,
         }) => {
           if (!pass && !added && !updated) {
-            if (commandOptions.retryCounter > 0) {
+            const retries = commandOptions
+              ? commandOptions.retryCounter
+              : options.retryCounter;
+            if (retries > 0) {
               const newCommandOptions = {
                 ...commandOptions,
-                retryCounter: commandOptions.retryCounter - 1,
+                retryCounter: retries - 1,
               };
               cy.wait(newCommandOptions.retryWaitingTime || 100);
               return matchImageSnapshot(subject, maybeName, newCommandOptions);
